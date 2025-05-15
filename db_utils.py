@@ -52,6 +52,7 @@ def init_db():
             if not cursor.fetchone():
                 raise Exception("Failed to create users table - table not found after creation")
             logging.info("Users table created and verified")
+            
             logging.info("Creating sent_vk_posts table if it doesn't exist...")
             with open('migrations/20230000_add_sent_vk_posts.sql', 'r') as f:
                 conn.executescript(f.read())
@@ -88,6 +89,7 @@ def init_db():
 
 def register_user(user_id: int, name: str, surname: str, patronymic: str, class_name: str, 
               shift: str, phone: str, telegram_username: str) -> None:
+
     with get_db_connection() as conn:
         conn.execute('''
             INSERT INTO users (
@@ -99,6 +101,7 @@ def register_user(user_id: int, name: str, surname: str, patronymic: str, class_
         conn.commit()
 
 def get_user_profile(user_id: int) -> dict:
+
     with get_db_connection() as conn:
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE user_id = ?", (user_id,))

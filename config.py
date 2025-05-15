@@ -1,5 +1,5 @@
-BOT_TOKEN = "pon"
+BOT_TOKEN = "ku"
 ADMIN_ID = [1262543088]
-VK_TOKEN = "mdam"
+VK_TOKEN = "ki"
 VK_GROUP_ID = 171068837
 DATABASE = "bot.db"

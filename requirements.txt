@@ -1,8 +1,6 @@
-aiogram>=3.0.0
+aiogram>=2.0,<3.0
 asyncio
 aiosqlite
 vk_api
 python-dotenv
 httpx
-beautifulsoup4
-нихуя

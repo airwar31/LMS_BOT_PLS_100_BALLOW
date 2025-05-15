@@ -30,7 +30,7 @@ async def forward_vk_post_to_telegram(bot: Bot, post, user_id: int):
                     if 'player' in video_data:
                         if len(attachments) > 1:
                             media.append(types.InputMediaVideo(media=video_data['player'], caption=text if not photos and not media else None))
-                            text = '' 
+                            text = ''
                         else:
                             await bot.send_video(user_id, video_data['player'], caption=text)
                             text = ''

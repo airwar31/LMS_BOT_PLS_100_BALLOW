@@ -1,5 +1,4 @@
 from aiogram import Dispatcher
-from aiogram.filters import Text
 from vk_message_handlers import process_vk_news, process_vk_news_prev, process_vk_news_next, process_vk_news_exit
 from states import RegistrationStates, ScheduleStates, AnnouncementStates
 from event_states import EventStates
@@ -50,15 +49,11 @@ from vk_message_handlers import (
 )
 
 def register_handlers(dp: Dispatcher):
-    from diary_handlers import (
-    start_diary_auth,
-    process_login,
-    show_homework,
-    show_grades,
-    return_to_main_menu
-)
-    from diary_states import DiaryStates
-    dp.register_message_handler(start_diary_auth, lambda msg: msg.text == "ЦОП", state="*")
+    from cop_handlers import open_cop_mini_app
+    
+
+    dp.register_message_handler(open_cop_mini_app, lambda msg: msg.text == "🏢 COP", state=None)
+    
 
     dp.register_message_handler(process_vk_news, commands=["vk_news"], state=None)
     dp.register_message_handler(process_vk_news, text="📰 VK Новости", state=None)
@@ -94,6 +89,8 @@ def register_handlers(dp: Dispatcher):
     dp.register_message_handler(process_event_end_time, state=EventStates.waiting_for_end_time)
     
     dp.register_message_handler(cmd_start, commands=['start'])
+    
+    
     
     dp.register_message_handler(start_registration, commands=['register'])
     dp.register_message_handler(lambda message: process_registration_step(message, dp.current_state(), field='cancel'), text="❌ Отменить регистрацию", state=RegistrationStates.all_states)

@@ -1,13 +1,12 @@
 import logging
 import asyncio
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from db_utils import init_db
 from schedule_db import init_db as init_schedule_db
 from vk_notifications import check_and_forward_vk_posts
 from router import register_handlers
 from config import BOT_TOKEN
-
 
 logging.basicConfig(level=logging.INFO)
 logging.info("Initializing database and creating tables...")
@@ -26,10 +25,9 @@ for attempt in range(3):
 
 bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
-dp = Dispatcher(storage=storage)
+dp = Dispatcher(bot, storage=storage)
 
-
-async def main():
+def main():
     import logging
     
     logging.basicConfig(
@@ -63,20 +61,19 @@ async def main():
                 except Exception as e:
                     logging.error(f"Error checking VK posts: {e}")
                 await asyncio.sleep(60)
-        
+                
         loop = asyncio.get_event_loop()
         loop.create_task(check_vk_posts_periodically())
         
         logging.info("Starting bot polling...")
-        await dp.start_polling()
+        executor.start_polling(dp, skip_updates=True)
     except Exception as e:
         logging.critical(f"Failed to start bot: {e}")
         raise
-
 
 if __name__ == '__main__':
     from migrations.convert_date_format import convert_dates
     from migrations.add_event_indexes import add_event_indexes
     convert_dates()
     add_event_indexes()
-    asyncio.run(main())
+    main()
